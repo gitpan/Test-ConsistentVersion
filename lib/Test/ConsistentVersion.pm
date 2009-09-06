@@ -6,7 +6,7 @@ use strict;
 use Carp;
 use Test::Builder;
 
-use version; our $VERSION = qv('0.0.1');
+use version; our $VERSION = qv('0.0.2');
 
 my $TEST = Test::Builder->new;
 my %ARGS;
@@ -119,7 +119,7 @@ Test::ConsistentVersion - Ensures a CPAN distribution has consistent versioning.
 
 =head1 VERSION
 
-This document describes Test::ConsistentVersion version 0.0.1
+This document describes Test::ConsistentVersion version 0.0.2
 
 
 =head1 SYNOPSIS
@@ -178,6 +178,16 @@ Test::ConsistentVersion requires no configuration files or environment variables
 
 =back
 
+
+B<Optional>
+
+=over
+
+=item L<Test::Pod::Content>
+
+For ensuring the module version matches that referenced in the POD.
+
+=back
 
 =head1 INCOMPATIBILITIES
 
