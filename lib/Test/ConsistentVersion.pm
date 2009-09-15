@@ -6,7 +6,7 @@ use strict;
 use Carp;
 use Test::Builder;
 
-use version; our $VERSION = qv('0.0.4');
+use version; our $VERSION = qv('0.1.0');
 
 my $TEST = Test::Builder->new;
 my %ARGS;
@@ -33,6 +33,7 @@ sub check_consistent_versions {
         }
     }
     $test_count++ unless $ARGS{no_changelog};
+    $test_count++ unless $ARGS{no_readme};
     $TEST->plan(tests => $test_count);
     
     ## no critic (eval)
@@ -44,6 +45,7 @@ sub check_consistent_versions {
     _check_module_versions($distro_version, @modules);
     _check_pod_versions(@modules) unless $ARGS{no_pod};
     _check_changelog($distro_version) unless $ARGS{no_changelog};
+    _check_readme($distro_version) unless $ARGS{no_readme};
 }
 
 sub _find_modules {
@@ -99,12 +101,27 @@ sub _check_changelog {
         open(my $fh, '<', 'Changes');
         my $version_check = quotemeta($version);
         
-        my $changlog = join "\n", <$fh>;
-        $TEST->like($changlog, qr{\b$version_check\b}, 'Changelog includes reference to the distribution version: ' . $version);
+        my $changelog = join "\n", <$fh>;
+        $TEST->like($changelog, qr{\b$version_check\b}, 'Changelog includes reference to the distribution version: ' . $version);
         close $fh;
     }
     else {
         $TEST->ok(0, 'Unable to find Changes file');
+    }
+}
+
+sub _check_readme {
+    my $version = shift;
+    if(-e 'README') {
+        open(my $fh, '<', 'README');
+        my $version_check = quotemeta($version);
+        
+        my $readme = join "\n", <$fh>;
+        $TEST->like($readme, qr{\b$version_check\b}, 'README file includes reference to the distribution version: ' . $version);
+        close $fh;
+    }
+    else {
+        $TEST->ok(0, 'Unable to find README file');
     }
 }
 
@@ -119,7 +136,7 @@ Test::ConsistentVersion - Ensures a CPAN distribution has consistent versioning.
 
 =head1 VERSION
 
-This document describes Test::ConsistentVersion version 0.0.4
+This document describes Test::ConsistentVersion version 0.1.0
 
 
 =head1 SYNOPSIS
@@ -141,8 +158,8 @@ This document describes Test::ConsistentVersion version 0.0.4
 =head1 DESCRIPTION
 
 The purpose of this module is to make it easy for other distribution
-authors to have consistent version numbers within the modules (and
-changelog) of the distribution.
+authors to have consistent version numbers within the modules (as well
+as readme file and changelog) of the distribution.
 
 
 =head1 INTERFACE
