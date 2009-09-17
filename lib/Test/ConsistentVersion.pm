@@ -6,7 +6,7 @@ use strict;
 use Carp;
 use Test::Builder;
 
-use version; our $VERSION = qv('0.1.0');
+use version; our $VERSION = qv('0.2.0');
 
 my $TEST = Test::Builder->new;
 my %ARGS;
@@ -34,7 +34,7 @@ sub check_consistent_versions {
     }
     $test_count++ unless $ARGS{no_changelog};
     $test_count++ unless $ARGS{no_readme};
-    $TEST->plan(tests => $test_count);
+    $TEST->plan(tests => $test_count) unless $TEST->has_plan;
     
     ## no critic (eval)
     #Find the version number
@@ -136,7 +136,7 @@ Test::ConsistentVersion - Ensures a CPAN distribution has consistent versioning.
 
 =head1 VERSION
 
-This document describes Test::ConsistentVersion version 0.1.0
+This document describes Test::ConsistentVersion version 0.2.0
 
 
 =head1 SYNOPSIS
