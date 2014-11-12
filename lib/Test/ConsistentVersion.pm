@@ -6,7 +6,7 @@ use strict;
 use Carp;
 use Test::Builder;
 
-use version; our $VERSION = qv('0.2.3');
+use version; our $VERSION = qv('0.3.0');
 
 my $TEST = Test::Builder->new;
 my %ARGS;
@@ -80,7 +80,7 @@ sub _check_pod_versions {
     foreach my $module (@modules) {
         eval "require $module" or $TEST->diag($@);
         my $module_version = $module->VERSION;
-        Test::Pod::Content::pod_section_like( $module, 'VERSION', qr{(^|\s)\Q$module_version\E(\s|$)}, "$module POD version is the same as module version")
+        Test::Pod::Content::pod_section_like( $module, 'VERSION', qr{(^|\s)v?\Q$module_version\E(\s|$)}i, "$module POD version is the same as module version")
     }
 }
 
@@ -102,7 +102,7 @@ sub _check_changelog {
         my $version_check = quotemeta($version);
         
         my $changelog = join "\n", <$fh>;
-        $TEST->like($changelog, qr{\b$version_check\b}, 'Changelog includes reference to the distribution version: ' . $version);
+        $TEST->like($changelog, qr{\bv?$version_check\b}i, 'Changelog includes reference to the distribution version: ' . $version);
         close $fh;
     }
     else {
@@ -117,7 +117,7 @@ sub _check_readme {
         my $version_check = quotemeta($version);
         
         my $readme = join "\n", <$fh>;
-        $TEST->like($readme, qr{\b$version_check\b}, 'README file includes reference to the distribution version: ' . $version);
+        $TEST->like($readme, qr{\bv?$version_check\b}i, 'README file includes reference to the distribution version: ' . $version);
         close $fh;
     }
     else {
@@ -136,7 +136,7 @@ Test::ConsistentVersion - Ensures a CPAN distribution has consistent versioning.
 
 =head1 VERSION
 
-This document describes Test::ConsistentVersion version 0.2.3
+This document describes Test::ConsistentVersion version 0.3.0
 
 
 =head1 SYNOPSIS
@@ -224,12 +224,12 @@ L<http://rt.cpan.org>.
 
 Glenn Fowler  C<< <cebjyre@cpan.org> >>
 
-Thanks to L<http://www.hiivesystems.com>.
+Thanks to L<http://www.affinitylive.com>.
 
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2009, Glenn Fowler C<< <cebjyre@cpan.org> >>. All rights reserved.
+Copyright (c) 2014, Glenn Fowler C<< <cebjyre@cpan.org> >>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
